@@ -107,6 +107,74 @@
             box-shadow: 0 4px 24px rgba(0,0,0,0.1);
         }
 
+        /* --- Avatar Parallax System --- */
+        .avatar-parallax-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Keeps it behind the z-index: 5 controls */
+            background-color: #e5e5e5; /* Fallback background for the avatar */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Base settings for all image layers */
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensures the images maintain proportions and align perfectly */
+            transform-origin: center center;
+        }
+
+        /* Parallax Keyframes 
+           Different layers move at different distances/rotations to create depth.
+        */
+        
+        /* 1. Neck: Barely moves, anchors the base */
+        @keyframes idle-neck {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(2px); }
+        }
+
+        /* 2. Head & Ears: Moderate movement, slight rotation for breathing/idle feel */
+        @keyframes idle-head {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(1deg); }
+        }
+
+        /* 3. Hair: Most movement, creating the foreground 3D illusion */
+        @keyframes idle-hair {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg) translateX(3px); }
+        }
+
+        /* Applying the layers and animations */
+        .layer-neck {
+            z-index: 10;
+            animation: idle-neck 4s ease-in-out infinite;
+        }
+
+        .layer-ears {
+            z-index: 11;
+            /* Syncs with head movement */
+            animation: idle-head 4s ease-in-out infinite; 
+        }
+
+        .layer-head {
+            z-index: 12;
+            animation: idle-head 4s ease-in-out infinite;
+        }
+
+        .layer-hair {
+            z-index: 13;
+            /* Hair moves slightly faster or further for depth */
+            animation: idle-hair 4s ease-in-out infinite;
+        }
+
         /* Top Overlay Controls */
         .top-controls {
             position: absolute;
@@ -290,7 +358,12 @@
         <div class="player-section">
             
             <div class="video-frame">
-                <img src="https://images.unsplash.com/photo-1621501103258-3e121eb83c16?q=80&w=600&auto=format&fit=crop" style="width:100%; height:100%; object-fit:cover; opacity:0.6; position:absolute;" alt="Video Background">
+                <div class="avatar-parallax-container">
+                    <img src="/neck.webp" class="parallax-layer layer-neck" alt="Neck">
+                    <img src="/ears.webp" class="parallax-layer layer-ears" alt="Ears">
+                    <img src="/head.webp" class="parallax-layer layer-head" alt="Head">
+                    <img src="/hair.webp" class="parallax-layer layer-hair" alt="Hair">
+                </div>
 
                 <div class="top-controls">
                     <div class="control-group">
