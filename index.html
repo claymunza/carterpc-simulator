@@ -8,16 +8,31 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <style>
-        /* --- Base Styles --- */
+       /* --- Base & Dynamic Background Styles --- */
+        @keyframes rgb-cycle {
+            0% { background-color: #fff0f0; }
+            20% { background-color: #f0fff0; }
+            40% { background-color: #f0ffff; }
+            60% { background-color: #f0f0ff; }
+            80% { background-color: #fff0ff; }
+            100% { background-color: #fff0f0; }
+        }
+
         body {
             margin: 0;
             font-family: 'Roboto', Arial, sans-serif;
-            background-color: #ffffff;
+            animation: rgb-cycle 12s linear infinite; /* Seamless soft rainbow background loop */
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+        }
+
+        /* --- Cartoon Game Aesthetic Foundations (Neubrutalism) --- */
+        .control-panel, .video-frame, .claymunza-footer, .captcha-card {
+            border: 4px solid #000000 !important;
+            box-shadow: 8px 8px 0px #000000 !important;
         }
 
         /* --- Desktop Layout Container --- */
@@ -53,33 +68,79 @@
             border-radius: 50%;
             background-color: #e0e0e0;
             object-fit: cover;
+            border: 2px solid #000;
         }
 
         .handle {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 700;
             color: #0f0f0f;
         }
 
-        .subscribe-btn {
-            background-color: #0f0f0f;
-            color: #ffffff;
-            border: none;
-            border-radius: 18px;
-            padding: 8px 16px;
+        /* --- Bouncy & Shiny Neubrutalist Buttons --- */
+        .subscribe-btn, .generate-btn, .control-group-ui select {
+            background-color: #ffffff;
+            color: #000000;
+            border: 3px solid #000000;
+            border-radius: 12px;
+            padding: 10px 18px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 4px 4px 0px #000000;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s;
         }
 
-        .subscribe-btn:hover {
-            opacity: 0.8;
+        .generate-btn {
+            background-color: #ffd700; /* Bright gold for main action */
+            margin-top: 10px;
+        }
+
+        /* Hover & Active Bouncy Physics */
+        .subscribe-btn:hover, .generate-btn:hover, .control-group-ui select:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000000;
+        }
+
+        .subscribe-btn:active, .generate-btn:active, .control-group-ui select:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+
+        /* Inner Shiny Beveled Edge Overlay */
+        .subscribe-btn::before, .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: skewX(-25deg);
+        }
+
+        .subscribe-btn:hover::before, .generate-btn:hover::before {
+            left: 150%;
+            transition: left 0.6s ease-in-out;
+        }
+
+        /* Showering Squares Particle System inside Surface */
+        @keyframes showering-squares {
+            0% { background-position: 0 0, 10px 20px; }
+            100% { background-position: 0 -40px, 10px -20px; }
+        }
+
+        .subscribe-btn:hover, .generate-btn:hover {
+            background-image: 
+                linear-gradient(90deg, rgba(255,255,255,0.3) 3px, transparent 3px),
+                linear-gradient(0deg, rgba(255,255,255,0.3) 3px, transparent 3px);
+            background-size: 20px 40px;
+            animation: showering-squares 0.8s linear infinite;
         }
 
         .video-title {
             font-size: 16px;
-            font-weight: 400;
+            font-weight: 700;
             color: #0f0f0f;
             margin: 0;
             line-height: 1.4;
@@ -93,7 +154,6 @@
             gap: 16px;
         }
 
-        /* Video Frame (Container for visual elements) */
         .video-frame {
             width: 330px;
             aspect-ratio: 9 / 16;
@@ -104,353 +164,290 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
         }
 
         /* --- Avatar Parallax System --- */
         .avatar-parallax-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* Keeps it behind the z-index: 5 controls */
-            background-color: #e5e5e5; /* Fallback background for the avatar */
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            background-color: #e5e5e5;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Base settings for all image layers */
         .parallax-layer {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Ensures the images maintain proportions and align perfectly */
+            width: 100%; height: 100%;
+            object-fit: contain;
             transform-origin: center center;
         }
-
-        /* Parallax Keyframes 
-           Different layers move at different distances/rotations to create depth.
-        */
         
-        /* 1. Neck: Barely moves, anchors the base */
         @keyframes idle-neck {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(2px); }
         }
 
-        /* 2. Head & Ears: Moderate movement, slight rotation for breathing/idle feel */
         @keyframes idle-head {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-4px) rotate(1deg); }
         }
 
-        /* 3. Hair: Most movement, creating the foreground 3D illusion */
         @keyframes idle-hair {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(2deg) translateX(3px); }
         }
 
-        /* Applying the layers and animations */
-        .layer-neck {
-            z-index: 10;
-            animation: idle-neck 4s ease-in-out infinite;
-        }
+        .layer-neck { z-index: 10; animation: idle-neck 4s ease-in-out infinite; }
+        .layer-ears { z-index: 11; animation: idle-head 4s ease-in-out infinite; }
+        .layer-head { z-index: 12; animation: idle-head 4s ease-in-out infinite; }
+        .layer-hair { z-index: 13; animation: idle-hair 4s ease-in-out infinite; }
 
-        .layer-ears {
-            z-index: 11;
-            /* Syncs with head movement */
-            animation: idle-head 4s ease-in-out infinite; 
-        }
-
-        .layer-head {
-            z-index: 12;
-            animation: idle-head 4s ease-in-out infinite;
-        }
-
-        .layer-hair {
-            z-index: 13;
-            /* Hair moves slightly faster or further for depth */
-            animation: idle-hair 4s ease-in-out infinite;
-        }
-
-        /* Top Overlay Controls */
         .top-controls {
             position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
-            display: flex;
-            justify-content: space-between;
-            z-index: 5;
+            top: 16px; left: 16px; right: 16px;
+            display: flex; justify-content: space-between; z-index: 5;
         }
 
-        .control-group {
-            display: flex;
-            gap: 12px;
-        }
+        .control-group { display: flex; gap: 12px; }
 
         .overlay-btn {
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            color: white; border: none;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
             cursor: pointer;
         }
 
-        /* Caption Overlay */
         .caption-overlay {
-            position: absolute;
-            top: 40%;
-            text-align: center;
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
+            position: absolute; top: 40%;
+            text-align: center; color: white;
+            font-size: 24px; font-weight: 900;
             text-transform: uppercase;
-            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            text-shadow: 3px 3px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
             z-index: 5;
+            padding: 0 10px;
         }
 
-        .caption-highlight {
-            color: #ffd700;
-        }
+        .caption-highlight { color: #ffd700; }
 
-        /* Action Buttons Bar */
         .action-bar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            padding-bottom: 10px;
-            z-index: 10;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 16px; padding-bottom: 10px; z-index: 10;
         }
 
         .action-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #0f0f0f;
-            padding: 0;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px; background: none; border: none;
+            cursor: pointer; color: #0f0f0f; padding: 0;
         }
 
-        .icon-circle {
-            background-color: #f2f2f2;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.2s;
+        .action-item .icon-circle {
+            background-color: #ffffff;
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            border: 3px solid #000;
+            box-shadow: 3px 3px 0px #000;
+            transition: transform 0.1s, box-shadow 0.1s;
         }
 
-        .icon-circle:hover {
-            background-color: #e5e5e5;
+        .action-item:hover .icon-circle {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #000;
         }
 
-        .icon-circle .material-icons {
-            font-size: 24px;
-        }
-
-        .action-item span {
-            font-size: 13px;
-            font-weight: 500;
-        }
+        .action-item span { font-size: 13px; font-weight: 700; }
 
         .audio-track {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background-color: #e0e0e0;
-            object-fit: cover;
-            margin-top: 8px;
+            width: 40px; height: 40px; border-radius: 8px;
+            border: 2px solid #000; object-fit: cover; margin-top: 8px;
         }
 
-        /* --- Simulator Control Panel (Desktop Top-Left) --- */
+        /* --- Simulator Control Panel --- */
         .control-panel {
             position: absolute;
-            top: 40px;
-            left: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            width: 280px;
-            backdrop-filter: blur(10px);
+            top: 40px; left: 40px;
+            background: #ffffff;
+            padding: 24px; border-radius: 16px;
+            z-index: 20; display: flex; flex-direction: column;
+            gap: 16px; width: 280px;
         }
 
-        .control-panel h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #0f0f0f;
-        }
-
-        .control-group-ui {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .control-group-ui label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #606060;
-            text-transform: uppercase;
-        }
-
-        .control-group-ui select, .control-group-ui button {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-family: inherit;
-            font-size: 14px;
-        }
-
-        .generate-btn {
-            background-color: #0556bf;
-            color: white;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-        }
-
-        .generate-btn:hover {
-            background-color: #044396;
-        }
+        .control-panel h2 { margin: 0; font-size: 20px; color: #0f0f0f; font-weight: 900; }
+        .control-group-ui { display: flex; flex-direction: column; gap: 6px; }
+        .control-group-ui label { font-size: 12px; font-weight: 900; color: #000; text-transform: uppercase; }
 
         /* --- Intense Animation State --- */
         @keyframes intense-talking {
             0% { transform: translateY(0) rotate(0deg); }
-            20% { transform: translateY(-6px) rotate(-4deg); }
-            40% { transform: translateY(3px) rotate(5deg); }
-            60% { transform: translateY(-4px) rotate(-3deg); }
-            80% { transform: translateY(2px) rotate(2deg); }
+            20% { transform: translateY(-7px) rotate(-5deg); }
+            40% { transform: translateY(4px) rotate(6deg); }
+            60% { transform: translateY(-5px) rotate(-4deg); }
+            80% { transform: translateY(3px) rotate(3deg); }
             100% { transform: translateY(0) rotate(0deg); }
         }
 
-        .is-talking .layer-head, .is-talking .layer-ears {
-            animation: intense-talking 0.5s infinite !important;
+        .is-talking .layer-head, .is-talking .layer-ears { animation: intense-talking 0.4s infinite !important; }
+        .is-talking .layer-hair { animation: intense-talking 0.4s infinite 0.08s !important; }
+
+        /* --- Custom Fake reCAPTCHA Verification Layer --- */
+        #captcha-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        
-        .is-talking .layer-hair {
-            animation: intense-talking 0.5s infinite 0.1s !important; /* Slight delay for physics */
+
+        .captcha-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 310px;
+            box-sizing: border-box;
+        }
+
+        .captcha-checkbox-wrapper {
+            position: relative;
+            width: 28px; height: 28px;
+        }
+
+        .captcha-checkbox {
+            width: 100%; height: 100%;
+            border: 2px solid #c1c1c1;
+            border-radius: 2px; background: #fff;
+            cursor: pointer; display: flex;
+            justify-content: center; align-items: center;
+        }
+
+        .captcha-checkbox:hover { border-color: #b2b2b2; }
+
+        @keyframes captcha-spin { to { transform: rotate(360deg); } }
+        .captcha-spinner {
+            display: none; width: 20px; height: 20px;
+            border: 2.5px solid #4a90e2; border-radius: 50%;
+            border-top-color: transparent;
+            animation: captcha-spin 0.8s linear infinite;
+        }
+
+        .captcha-check {
+            display: none; color: #00aa00;
+            font-size: 26px; font-weight: 900;
+        }
+
+        .captcha-text { font-size: 14px; color: #222; flex-grow: 1; font-weight: 500; }
+        .captcha-logo { display: flex; flex-direction: column; align-items: center; }
+        .captcha-logo img { width: 32px; height: 32px; }
+        .captcha-logo span { font-size: 8px; color: #555; margin-top: 2px; }
+
+        /* Fake Fullscreen Loader */
+        .loading-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .game-loader {
+            width: 60px; height: 60px;
+            border: 6px solid #000; border-radius: 12px;
+            background: #ffd700;
+            animation: captcha-spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .loading-container span {
+            font-size: 20px; font-weight: 900; color: #000;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* --- Tiny Floating Pill Footer Overlay --- */
+        .claymunza-footer {
+            position: fixed;
+            bottom: 16px; left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            color: #000000;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 900;
+            z-index: 99999;
+            text-decoration: none;
+            display: flex; gap: 4px;
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s;
+        }
+
+        .claymunza-footer:hover {
+            transform: translateX(-50%) translate(-2px, -2px);
+            box-shadow: 12px 12px 0px #000000 !important;
+        }
+
+        .claymunza-footer a {
+            color: #0556bf;
+            text-decoration: underline;
         }
 
         /* --- Rotate Device Warning --- */
         #rotate-warning {
-            display: none;
-            position: fixed;
+            display: none; position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #0f0f0f;
-            color: white;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+            background-color: #0f0f0f; color: white; z-index: 99999;
+            flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 20px;
         }
 
-        #rotate-warning i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            animation: rotate-phone 2s infinite ease-in-out;
-        }
-
-        @keyframes rotate-phone {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(-90deg); }
-            100% { transform: rotate(0deg); }
-        }
+        #rotate-warning i { font-size: 64px; margin-bottom: 20px; animation: rotate-phone 2s infinite ease-in-out; }
+        @keyframes rotate-phone { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } }
 
         /* --- Mobile Responsive UI --- */
         @media (max-width: 800px) {
-            /* Hide UI and show warning if mobile is in portrait */
             @media (orientation: portrait) {
-                .shorts-container { display: none !important; }
+                .shorts-container, .control-panel, .claymunza-footer { display: none !important; }
                 #rotate-warning { display: flex !important; }
             }
-            body {
-                background-color: #000000;
-            }
-
-            .shorts-container {
-                height: 100dvh;
-                padding: 0;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .player-section {
-                width: 100%;
-                height: 100%;
-                gap: 0;
-            }
-
-            .video-frame {
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-            }
-
-            /* Convert Metadata to Bottom-Left Overlay */
-            .metadata-section {
-                position: absolute;
-                bottom: 24px;
-                left: 16px;
-                width: calc(100% - 80px);
-            }
-
-            .handle, .video-title {
-                color: #ffffff;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            }
-
-            .subscribe-btn {
-                background-color: #ffffff;
-                color: #0f0f0f;
-            }
-
-            /* Convert Actions to Bottom-Right Overlay */
-            .action-bar {
-                position: absolute;
-                bottom: 24px;
-                right: 12px;
-            }
-
-            .action-item {
-                color: #ffffff;
-            }
-
-            .icon-circle {
-                background-color: rgba(255, 255, 255, 0.1);
-                color: #ffffff;
-                backdrop-filter: blur(4px);
-            }
-
-            .icon-circle:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-            }
+            body { background-color: #000000; animation: none; }
+            .shorts-container { height: 100dvh; padding: 0; justify-content: center; align-items: center; }
+            .player-section { width: 100%; height: 100%; gap: 0; }
+            .video-frame { width: 100%; height: 100%; border-radius: 0; border: none !important; box-shadow: none !important; }
+            .metadata-section { position: absolute; bottom: 24px; left: 16px; width: calc(100% - 80px); }
+            .handle, .video-title { color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+            .action-bar { position: absolute; bottom: 24px; right: 12px; }
+            .action-item { color: #ffffff; }
+            .action-item .icon-circle { background-color: rgba(255, 255, 255, 0.2); border-color: #fff; color: #fff; }
         }
     </style>
 </head>
 <body>
+
+    <audio id="bgm-player" src="/bgm.mp3" loop></audio>
+
+    <div id="captcha-overlay">
+        <div class="captcha-card" id="captcha-card">
+            <div class="captcha-checkbox-wrapper">
+                <div class="captcha-checkbox" onclick="verifyFakeCaptcha(this)"></div>
+                <div class="captcha-spinner"></div>
+                <div class="captcha-check">✓</div>
+            </div>
+            <div class="captcha-text">I'm not a robot</div>
+            <div class="captcha-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/RecaptchaLogo.svg" alt="reCAPTCHA">
+                <span>privacy • terms</span>
+            </div>
+        </div>
+
+        <div class="loading-container" id="game-loader-screen">
+            <div class="game-loader"></div>
+            <span>Loading Simulator...</span>
+        </div>
+    </div>
 
     <div id="rotate-warning">
         <i class="material-icons">screen_rotation</i>
@@ -566,54 +563,84 @@
         </div>
     </div>
 
-   <script>
-        // Existing Subscribe logic
+    <div class="claymunza-footer">
+        made by &nbsp;<a href="https://cza.vercel.app" target="_blank">claymunza</a>
+    </div>
+</body>
+    <script>
+        // Neubrutalist Subscribe Toggle Action
         function toggleSubscribe(btn) {
             if (btn.innerText === "Subscribe") {
                 btn.innerText = "Subscribed";
-                btn.style.backgroundColor = window.innerWidth <= 800 ? "rgba(255,255,255,0.2)" : "#f2f2f2";
-                btn.style.color = window.innerWidth <= 800 ? "#fff" : "#0f0f0f";
+                btn.style.backgroundColor = "#111111";
+                btn.style.color = "#ffffff";
             } else {
                 btn.innerText = "Subscribe";
-                btn.style.backgroundColor = window.innerWidth <= 800 ? "#ffffff" : "#0f0f0f";
-                btn.style.color = window.innerWidth <= 800 ? "#0f0f0f" : "#ffffff";
+                btn.style.backgroundColor = "#ffffff";
+                btn.style.color = "#000000";
             }
         }
 
-        // --- Simulator Engine ---
+        // --- Fake reCAPTCHA Verification and Audio Engine Sequence ---
+        function verifyFakeCaptcha(checkboxElement) {
+            const card = document.getElementById('captcha-card');
+            const loaderScreen = document.getElementById('game-loader-screen');
+            const overlay = document.getElementById('captcha-overlay');
+            const spinner = document.querySelector('.captcha-spinner');
+            const checkmark = document.querySelector('.captcha-check');
+            const bgm = document.getElementById('bgm-player');
+
+            // 1. Hide the empty check square, show spinning loader
+            checkboxElement.style.display = 'none';
+            spinner.style.display = 'block';
+
+            setTimeout(() => {
+                // 2. Hide spinner, switch to green success checkmark
+                spinner.style.display = 'none';
+                checkmark.style.display = 'block';
+                
+                // Unblock and instantly initialize sound play tracking loop
+                bgm.play().catch(err => console.log("Audio play blocked: ", err));
+
+                setTimeout(() => {
+                    // 3. Swap Captcha card out for stylized game screen spinner
+                    card.style.display = 'none';
+                    loaderScreen.style.display = 'flex';
+
+                    setTimeout(() => {
+                        // 4. Clear overlay entirely to reveal the app layout
+                        overlay.style.opacity = '0';
+                        setTimeout(() => {
+                            overlay.style.display = 'none';
+                        }, 400);
+                    }, 1600); // 1.6 Seconds for loading simulation
+                }, 600);
+            }, 1000); // 1 Second validation check simulation
+        }
+
+        // --- Simulator Generator Logic ---
         let subtitleInterval = null;
 
         function startSimulation() {
-            // 1. Get values from UI
             const topic = document.getElementById('sim-topic').value;
             const tone = document.getElementById('sim-tone').value;
             const subtopic = document.getElementById('sim-subtopic').value;
             const stance = document.getElementById('sim-stance').value;
 
-            // 2. Generate Content Structurally
             const { title, subtitles } = generateScript(topic, tone, subtopic, stance);
-
-            // 3. Update Title UI
             document.getElementById('dynamic-title').innerText = title + " #carterpcs #tech";
-
-            // 4. Start Video Playback Simulation
             playVideo(subtitles);
         }
 
         function generateScript(topic, tone, subtopic, stance) {
-            // Dynamic Title Generation
             let title = `Why I ${stance === 'For' ? 'love' : 'refuse to buy'} ${topic}`;
             if (tone === 'Aggressive') title = title.toUpperCase() + " 😡";
             if (tone === 'Educational') title = `The truth about ${topic} ${subtopic}`;
             if (tone === 'Sarcastic') title = `Oh look, another video about ${topic}...`;
 
-            // Dynamic Subtitle Generation (Array of chunks to display sequentially)
             let subs = [];
-            
-            // Intro
             subs.push(`Alright let's talk about <span class="caption-highlight">${topic}</span>.`);
             
-            // Middle
             if (stance === 'For') {
                 subs.push(`Everyone hates on <span class="caption-highlight">${subtopic}</span>...`);
                 subs.push(`But honestly? It's <span class="caption-highlight">genius</span>.`);
@@ -622,7 +649,6 @@
                 subs.push(`It is an absolute <span class="caption-highlight">scam</span>.`);
             }
 
-            // Tone Modifiers
             if (tone === 'Humorous') {
                 subs.push(`I'd rather use a <span class="caption-highlight">potato</span>.`);
                 subs.push(`Bro, be so for real right now.`);
@@ -637,10 +663,9 @@
                 subs.push(`Take all my money. Not.`);
             }
 
-            // Outro
             subs.push(`Let me know what you think.`);
             subs.push(`Follow for more.`);
-            subs.push(``); // Clear screen at end
+            subs.push(``); 
 
             return { title, subtitles: subs };
         }
@@ -649,21 +674,16 @@
             const captionBox = document.getElementById('dynamic-captions');
             const parallaxContainer = document.querySelector('.avatar-parallax-container');
             
-            // Clear any currently running video
             if (subtitleInterval) clearInterval(subtitleInterval);
             captionBox.innerHTML = "";
-            
-            // Start intense talking animation
             parallaxContainer.classList.add('is-talking');
 
             let index = 0;
-            // Change subtitle every 2 seconds
             subtitleInterval = setInterval(() => {
                 if (index < subtitles.length) {
                     captionBox.innerHTML = subtitles[index];
                     index++;
                 } else {
-                    // Video finished
                     clearInterval(subtitleInterval);
                     parallaxContainer.classList.remove('is-talking');
                 }
